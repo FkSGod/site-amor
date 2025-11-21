@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loveflix - Nossa História</title>
+    <style>
+        /* --- ESTILO GERAL (PC) --- */
+        :root { --netflix-red: #E50914; --bg-color: #141414; }
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden; /* Evita rolagem lateral indesejada */
+        }
+        
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7) 10%, transparent);
+            z-index: 100;
+            box-sizing: border-box; /* Garante que o padding não estoure a tela */
+        }
+        .logo { color: var(--netflix-red); font-size: 30px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* DESTAQUE PRINCIPAL (CAPA) */
+        .destaque {
+            height: 85vh;
+            /* FOTO DE FUNDO - TROQUE O NOME AQUI SE PRECISAR */
+            background: linear-gradient(rgba(0,0,0,0), rgba(20,20,20,1)), url('foto4.jpg'); 
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 5%;
+        }
+        
+        .titulo-filme { font-size: 60px; font-weight: bold; margin-bottom: 10px; max-width: 80%; }
+        .sinopse { font-size: 18px; max-width: 500px; margin-bottom: 20px; color: #ccc; }
+        
+        .botoes { display: flex; gap: 15px; }
+        .btn {
+            padding: 10px 25px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-play { background-color: white; color: black; }
+        .btn-info { background-color: rgba(109, 109, 110, 0.7); color: white; }
+        .btn:hover { opacity: 0.8; }
+
+        /* CARROSSEL DE FOTOS */
+        .categoria { padding: 20px 5%; }
+        .titulo-categoria { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
+        
+        .carrossel {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+        }
+        .carrossel::-webkit-scrollbar { display: none; }
+        .carrossel a { text-decoration: none; color: white; } /* Remove sublinhado do link */
+
+        .item-filme {
+            min-width: 200px;
+            height: 300px;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+        .item-filme img { width: 100%; height: 100%; object-fit: cover; }
+        .item-filme:hover { transform: scale(1.1); z-index: 10; }
+
+        /* MODAIS (JANELAS QUE ABREM) */
+        #modal-declaracao, #modal-info {
+            display: none; 
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        .texto-carta {
+            max-width: 600px;
+            color: white;
+            font-size: 20px;
+            line-height: 1.6;
+            margin-top: 50px;
+        }
+        .fechar {
+            position: absolute;
+            top: 20px; right: 30px;
+            font-size: 40px;
+            cursor: pointer;
+            color: white;
+        }
+
+        /* --- MODO CELULAR (RESPONSIVO) --- */
+        /* Tudo aqui dentro só acontece se a tela for menor que 768px */
+        @media (max-width: 768px) {
+            .titulo-filme { 
+                font-size: 35px; 
+                text-align: center; 
+                max-width: 100%;
+            }
+
+            .sinopse { 
+                font-size: 14px; 
+                text-align: center; 
+                padding: 0 20px; 
+                display: block; /* Garante que fique em bloco */
+            }
+
+            .destaque { 
+                align-items: center; /* Centraliza tudo no meio da tela */
+                padding-left: 0; 
+                background-position: center; /* Tenta focar o meio da foto */
+            }
+
+            .botoes { 
+                width: 100%; 
+                justify-content: center; 
+                margin-top: 10px;
+            }
+
+            .btn { 
+                font-size: 14px; 
+                padding: 10px 15px; 
+            }
+
+            /* Ajusta a leitura da carta no celular */
+            .texto-carta { 
+                font-size: 16px; 
+                margin-top: 60px; 
+                padding: 0 10px;
+                width: 100%;
+            }
+            
+            .fechar {
+                top: 15px;
+                right: 20px;
+            }
+
+            /* Ajusta o carrossel para celular */
+            .item-filme {
+                min-width: 120px; /* Fotos menores no celular */
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">NAMOROFLIX</div>
+    </header>
+
+    <div class="destaque">
+        <div class="titulo-filme">Nossa Melhor Temporada</div>
+        <div class="sinopse">
+            98% Relevante • 2024 • Romance • Livre para todos os públicos.<br><br>
+            A menina que virou o motivo para mudar e ser uma pessoa melhor.
+        </div>
+        <div class="botoes">
+            <button class="btn btn-play" onclick="abrirDeclaracao()">
+                ▶ Ler Carta
+            </button>
+            <button class="btn btn-info" onclick="abrirInfo()">
+                ℹ Mais Informações
+            </button>
+        </div>
+    </div>
+
+    <div class="categoria">
+        <div class="titulo-categoria">Amor da minha vida</div>
+        <div class="carrossel">
+            <a href="foto1.jpg" target="_blank"><div class="item-filme"><img src="foto1.jpg" alt="Foto 1"></div></a>
+            <a href="foto2.jpg" target="_blank"><div class="item-filme"><img src="foto2.jpg" alt="Foto 2"></div></a>
+            <a href="foto3.jpg" target="_blank"><div class="item-filme"><img src="foto3.jpg" alt="Foto 3"></div></a>
+            <a href="foto4.jpg" target="_blank"><div class="item-filme"><img src="foto4.jpg" alt="Foto 4"></div></a>
+            <a href="foto5.jpg" target="_blank"><div class="item-filme"><img src="foto5.jpg" alt="Foto 5"></div></a>
+            <a href="foto6.jpg" target="_blank"><div class="item-filme"><img src="foto6.jpg" alt="Foto 6"></div></a>
+            <a href="foto7.jpg" target="_blank"><div class="item-filme"><img src="foto7.jpg" alt="Foto 7"></div></a>
+            <a href="foto8.jpg" target="_blank"><div class="item-filme"><img src="foto8.jpg" alt="Foto 8"></div></a>
+        </div>
+    </div>
+
+    <div id="modal-declaracao">
+        <span class="fechar" onclick="fecharDeclaracao()">&times;</span>
+        <div class="texto-carta">
+            <h1>Para o Amor da Minha Vida</h1>
+            <p>
+                Oi, meu amor. <br><br>
+                Eu queria criar algo diferente para dizer o quanto você é especial. Assim como os filmes e séries que a gente assiste, a gente tem drama, comédia, quebra pau, mas acima de tudo, tem muito amor estranho KKKKKKK. <br><br>
+                Você é a única coisa que eu quero assistir na minha vida, seus momentos tristes, alegres, até mesmo os depressivos com surto...<br><br>
+                Porque eu te amo infinitamente.
+            </p>
+            <br>
+            <p style="color: var(--netflix-red);">Com amor, do seu Fofinho</p>
+        </div>
+    </div>
+
+    <div id="modal-info">
+        <span class="fechar" onclick="fecharInfo()">&times;</span>
+        <div class="texto-carta">
+            <h1>Ficha Técnica</h1>
+            <p style="text-align: left; display: inline-block;">
+                <strong>Elenco Principal:</strong> Fofinho e Chico Bento ❤️<br><br>
+                <strong>Gênero:</strong> Romance, Comédia e (às vezes) Drama<br><br>
+                <strong>Avaliação da Crítica:</strong> ⭐⭐⭐⭐⭐ (5/5)<br><br>
+                <strong>Sinopse Estendida:</strong><br>
+                Este não é apenas mais um romance clichê. É a história de como minha vida ficou muito mais colorida desde que você chegou. 
+                Não há previsão para o fim das temporadas. Renovado eternamente.
+            </p>
+        </div>
+    </div>
+
+    <audio id="musica" loop>
+        <source src="som.mp3" type="audio/mp3">
+    </audio>
+
+    <script>
+        var audio = document.getElementById("musica");
+        var modal = document.getElementById("modal-declaracao");
+        var modalInfo = document.getElementById("modal-info");
+
+        // Funções da Carta (Com música)
+        function abrirDeclaracao() {
+            modal.style.display = "flex";
+            audio.play(); 
+        }
+
+        function fecharDeclaracao() {
+            modal.style.display = "none";
+            audio.pause(); 
+            audio.currentTime = 0;
+        }
+
+        // Funções do Mais Informações (Sem música)
+        function abrirInfo() {
+            modalInfo.style.display = "flex";
+        }
+
+        function fecharInfo() {
+            modalInfo.style.display = "none";
+        }
+    </script>
+</body>
+</html>
